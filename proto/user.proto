@@ -7,6 +7,15 @@ message User {
     string Name = 3;
 }
 
+enum UserEvents {
+    CREAT_USER = 0;
+    USER_CREATED = 1;
+    UPDATE_USER = 2;
+    USER_UPDATED = 3;
+    DELETE_USER = 4;
+    USER_DELETED = 5;
+}
+
 message CreateUser {
     User User = 1;
 }
