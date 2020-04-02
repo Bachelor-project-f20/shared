@@ -7,6 +7,10 @@ message User {
     string Name = 3;
 }
 
+enum UserService {
+    USERS = 0;
+}
+
 enum UserEvents {
     CREATE_USER = 0;
     USER_CREATED = 1;
