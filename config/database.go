@@ -32,7 +32,7 @@ func setupOutbox(config *ConfigValues, result *ConfigResult) error {
 		return errors.New("No event emitter")
 	}
 
-	out, err := outbox.NewOutbox(config.DatabaseType, config.DatabaseConnection, result.EventEmitter, config.OutboxModels)
+	out, err := outbox.NewOutbox(config.DatabaseType, config.DatabaseConnection, result.EventEmitter, config.OutboxModels...)
 	if err != nil {
 		log.Fatalf("Error creating Outbox: %v \n", err)
 	}
