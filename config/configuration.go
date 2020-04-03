@@ -81,6 +81,7 @@ func setupDefaulValues(defaultValues ConfigValues) ConfigValues {
 	config.UseEmitter = defaultValues.UseEmitter
 	config.UseListener = defaultValues.UseListener
 	config.UseOutbox = defaultValues.UseOutbox
+	config.OutboxModels = defaultValues.OutboxModels
 	return config
 }
 

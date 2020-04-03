@@ -24,11 +24,11 @@ func setupOutbox(config *ConfigValues, result *ConfigResult) error {
 		return nil
 	}
 	if len(config.OutboxModels) == 0 {
-		log.Fatal("setupOutbox: No models to persist")
+		log.Fatalln("setupOutbox: No models to persist")
 		return errors.New("No models to persist")
 	}
 	if result.EventEmitter == nil {
-		log.Fatal("setupOutbox: No event emitter")
+		log.Fatalln("setupOutbox: No event emitter")
 		return errors.New("No event emitter")
 	}
 

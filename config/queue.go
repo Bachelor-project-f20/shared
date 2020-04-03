@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -48,14 +47,14 @@ func setupNatsConn(config *ConfigValues) (*nats.EncodedConn, error) {
 	natsConn, err := nats.Connect(config.MessageBrokerConnection)
 
 	if err != nil {
-		fmt.Println("Connection to Nats failed")
+		log.Fatalln("Connection to Nats failed")
 		return nil, err
 	}
 
 	encodedConn, err := nats.NewEncodedConn(natsConn, "json")
 
 	if err != nil {
-		fmt.Println("Creation of encoded connection failed")
+		log.Fatalln("Creation of encoded connection failed")
 		return nil, err
 	}
 
