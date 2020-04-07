@@ -6,7 +6,6 @@ import (
 
 	"github.com/Bachelor-project-f20/eventToGo"
 	etgNats "github.com/Bachelor-project-f20/eventToGo/nats"
-	"github.com/nats-io/nats.go"
 )
 
 func extractFromEnvForQueue(config *ConfigValues) {
@@ -18,46 +17,41 @@ func extractFromEnvForQueue(config *ConfigValues) {
 
 func setupEventEmitterAndListener(config *ConfigValues, result *ConfigResult) error {
 	if config.MessageBrokerType == eventToGo.NATS {
-		log.Println("Setting up nats")
-		encodedConn, err := setupNatsConn(config)
+		err := setupNats(config, result)
 		if err != nil {
-			log.Fatalf("Error connecting to Nats: %v \n", err)
 			return err
 		}
-		if config.UseEmitter {
-			result.EventEmitter, err = etgNats.NewNatsEventEmitter(encodedConn, config.Exchange, config.QueueType)
-			if err != nil {
-				log.Fatalf("Error creating event emitter: %v \n", err)
-			}
-		}
-		if config.UseListener {
-			result.EventListener, err = etgNats.NewNatsEventListener(encodedConn, config.Exchange, config.QueueType)
-			if err != nil {
-				log.Fatalf("Error creating event listener: %v \n", err)
-			}
-		}
-
+		return nil
 	}
 	log.Println("setupEventEmitterAndListener DONE")
 	return nil
 }
 
-func setupNatsConn(config *ConfigValues) (*nats.EncodedConn, error) {
-
-	natsConn, err := nats.Connect(config.MessageBrokerConnection)
-
-	if err != nil {
-		log.Fatalln("Connection to Nats failed")
-		return nil, err
+func setupNats(config *ConfigValues, result *ConfigResult) error {
+	log.Println("Setting up nats")
+	natsHandler := etgNats.NatsHandler{}
+	if config.UseEmitter && config.UseListener {
+		e, l, err := natsHandler.SetupEmitterAndListener(config.Exchange, config.QueueType, config.MessageBrokerConnection)
+		if err != nil {
+			return err
+		}
+		result.EventEmitter = e
+		result.EventListener = l
+	} else if config.UseEmitter {
+		e, err := natsHandler.SetupEmitter(config.Exchange, config.QueueType, config.MessageBrokerConnection)
+		if err != nil {
+			log.Fatalf("Error creating event emitter: %v \n", err)
+			return err
+		}
+		result.EventEmitter = e
+	} else if config.UseListener {
+		l, err := natsHandler.SetupListener(config.Exchange, config.QueueType, config.MessageBrokerConnection)
+		if err != nil {
+			log.Fatalf("Error creating event listener: %v \n", err)
+			return err
+		}
+		result.EventListener = l
 	}
-
-	encodedConn, err := nats.NewEncodedConn(natsConn, "json")
-
-	if err != nil {
-		log.Fatalln("Creation of encoded connection failed")
-		return nil, err
-	}
-
-	return encodedConn, nil
-
+	log.Println("SHARED: setup nats done")
+	return nil
 }
