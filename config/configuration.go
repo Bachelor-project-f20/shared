@@ -12,6 +12,7 @@ import (
 var (
 	DBTypeDefault                  = outbox.MySQL
 	DBConnectionDefault            = "root:root@/root?charset=utf8&parseTime=True&loc=Local"
+	DBConnectionSleepDuration      = 10
 	MessageBrokerTypeDefault       = eventToGo.NATS
 	MessageBrokerDefaultConnection = "localhost:4222"
 	ExchangeDefault                = "user"
@@ -19,16 +20,17 @@ var (
 )
 
 type ConfigValues struct {
-	DatabaseType            outbox.DbType
-	DatabaseConnection      string
-	MessageBrokerType       eventToGo.BrokerType
-	MessageBrokerConnection string
-	Exchange                string
-	QueueType               string
-	UseEmitter              bool
-	UseListener             bool
-	UseOutbox               bool
-	OutboxModels            []interface{}
+	DatabaseType                    outbox.DbType
+	DatabaseConnection              string
+	DatabaseConnectionSleepDuration int
+	MessageBrokerType               eventToGo.BrokerType
+	MessageBrokerConnection         string
+	Exchange                        string
+	QueueType                       string
+	UseEmitter                      bool
+	UseListener                     bool
+	UseOutbox                       bool
+	OutboxModels                    []interface{}
 }
 
 type ConfigResult struct {
@@ -68,6 +70,7 @@ func setupDefaulValues(defaultValues ConfigValues) ConfigValues {
 	if defaultValues.DatabaseConnection == "" {
 		config.DatabaseConnection = DBConnectionDefault
 	}
+	config.DatabaseConnectionSleepDuration = defaultValues.DatabaseConnectionSleepDuration
 	config.MessageBrokerType = defaultValues.MessageBrokerType
 	if defaultValues.MessageBrokerConnection == "" {
 		config.MessageBrokerConnection = MessageBrokerDefaultConnection

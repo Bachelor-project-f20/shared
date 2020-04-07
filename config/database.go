@@ -4,12 +4,17 @@ import (
 	"errors"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/Bachelor-project-f20/go-outbox"
 )
 
 func extractFromEnvForDb(config *ConfigValues) {
-
+	if v := os.Getenv("DB_CONNECTION_SLEEP"); v != "" {
+		if i1, err := strconv.Atoi(v); err == nil {
+			config.DatabaseConnectionSleepDuration = i1
+		}
+	}
 	if v := os.Getenv("MYSQL_URL"); v != "" {
 		config.DatabaseType = outbox.MySQL
 		config.DatabaseConnection = v
@@ -32,7 +37,7 @@ func setupOutbox(config *ConfigValues, result *ConfigResult) error {
 		return errors.New("No event emitter")
 	}
 
-	out, err := outbox.NewOutbox(config.DatabaseType, config.DatabaseConnection, result.EventEmitter, config.OutboxModels...)
+	out, err := outbox.NewOutbox(config.DatabaseType, config.DatabaseConnection, config.DatabaseConnectionSleepDuration, result.EventEmitter, config.OutboxModels...)
 	if err != nil {
 		log.Fatalf("Error creating Outbox: %v \n", err)
 	}
