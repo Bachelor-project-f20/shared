@@ -1,11 +1,13 @@
 package config
 
 import (
+	"errors"
 	"log"
 	"os"
 
 	"github.com/Bachelor-project-f20/eventToGo"
 	etgNats "github.com/Bachelor-project-f20/eventToGo/nats"
+	etgSNS "github.com/Bachelor-project-f20/eventToGo/sns"
 )
 
 func extractFromEnvForQueue(config *ConfigValues) {
@@ -23,7 +25,50 @@ func setupEventEmitterAndListener(config *ConfigValues, result *ConfigResult) er
 		}
 		return nil
 	}
+	if config.MessageBrokerType == eventToGo.SNS {
+		err := setupSNS(config, result)
+		if err != nil {
+			return err
+		}
+		return nil
+	}
 	log.Println("setupEventEmitterAndListener DONE")
+	return nil
+}
+
+func setupSNS(config *ConfigValues, result *ConfigResult) error {
+	log.Println("Setting up SNS")
+	snsHandler := etgSNS.SNSHandler{}
+	if config.SNSClient == nil {
+		return errors.New("Must supply a SNS client instance via config object")
+	}
+	if config.Events == nil {
+		return errors.New("Must supply a list of events(topics) to create and subscribe to via config object")
+	}
+
+	if config.UseEmitter && config.UseListener {
+		e, l, err := snsHandler.SetupEmitterAndListener(config.SNSClient, config.Events...)
+		if err != nil {
+			return err
+		}
+		result.EventEmitter = e
+		result.EventListener = l
+	} else if config.UseEmitter {
+		e, err := snsHandler.SetupEmitter(config.SNSClient, config.Events...)
+		if err != nil {
+			log.Fatalf("Error creating event emitter: %v \n", err)
+			return err
+		}
+		result.EventEmitter = e
+	} else if config.UseListener {
+		l, err := snsHandler.SetupListener(config.SNSClient, config.Events...)
+		if err != nil {
+			log.Fatalf("Error creating event listener: %v \n", err)
+			return err
+		}
+		result.EventListener = l
+	}
+	log.Println("SHARED: setup SNS done")
 	return nil
 }
 
