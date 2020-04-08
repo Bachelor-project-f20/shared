@@ -7,6 +7,7 @@ import (
 
 	"github.com/Bachelor-project-f20/eventToGo"
 	"github.com/Bachelor-project-f20/go-outbox"
+	"github.com/aws/aws-sdk-go/service/sns"
 )
 
 var (
@@ -24,6 +25,8 @@ type ConfigValues struct {
 	DatabaseConnection              string
 	DatabaseConnectionSleepDuration int
 	MessageBrokerType               eventToGo.BrokerType
+	SNSClient                       *sns.SNS
+	Events                          []string
 	MessageBrokerConnection         string
 	Exchange                        string
 	QueueType                       string
