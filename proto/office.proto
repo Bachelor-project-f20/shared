@@ -1,0 +1,67 @@
+syntax = "proto3";
+package proto;
+
+import "proto/user.proto"; 
+
+message Office { 
+    string ID = 1;
+    string Name = 2;
+    Address Address = 3;
+    string AddressID = 4;
+    repeated ContactInfo ContactInfo = 5;
+    repeated User Users = 6;
+}
+
+message Address {
+    string ID = 1;
+    string RoadName = 2;
+    int32 Number = 3;
+    int32 ZipCode = 4;
+}
+
+
+message ContactInfo {
+    string ID = 1;
+    string Title = 2;
+    int32 PhoneNumber = 3;
+    string Mail = 4;
+    string CompanyID = 5;
+}
+
+
+enum OfficeService {
+    OFFICES = 0;
+}
+
+enum OfficeEvents {
+    CREATE_OFFICE = 0;
+    OFFICE_CREATED = 1;
+    UPDATE_OFFICE = 2;
+    OFFICE_UPDATED = 3;
+    DELETE_OFFICE = 4;
+    OFFICE_DELETED = 5;
+}
+
+message CreateOffice {
+    Office Office = 1;
+}
+
+message OfficeCreated {
+    Office Office = 1;
+}
+
+message OfficeUpdated {
+    Office Office = 1;
+}
+
+message UpdateOffice { 
+    Office Office = 1;
+}
+
+message DeleteOffice {
+    Office Office = 1;
+}
+
+message OfficeDeleted {
+    Office Office = 1;
+}
