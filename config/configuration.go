@@ -37,9 +37,10 @@ type ConfigValues struct {
 }
 
 type ConfigResult struct {
-	EventEmitter  eventToGo.EventEmitter
-	EventListener eventToGo.EventListener
-	Outbox        outbox.Outbox
+	EventEmitter    eventToGo.EventEmitter
+	EventListener   eventToGo.EventListener
+	Outbox          outbox.Outbox
+	ServePrometheus func()
 }
 
 func ConfigService(configFilePath string, defaultValues ConfigValues) (ConfigResult, error) {
@@ -65,7 +66,7 @@ func ConfigService(configFilePath string, defaultValues ConfigValues) (ConfigRes
 	}
 
 	if config.UsePrometheus {
-		prometheus.ServePrometheus()
+		configResult = prometheus.ServePrometheus()
 	}
 
 	return configResult, nil
