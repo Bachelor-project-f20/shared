@@ -7,6 +7,7 @@ import (
 
 	"github.com/Bachelor-project-f20/eventToGo"
 	"github.com/Bachelor-project-f20/go-outbox"
+	"github.com/Bachelor-project-f20/shared/monitoring/prometheus"
 )
 
 var (
@@ -17,6 +18,7 @@ var (
 	MessageBrokerDefaultConnection = "localhost:4222"
 	ExchangeDefault                = "user"
 	QueueTypeDefault               = "queue"
+	UsePrometheusDefault           = true
 )
 
 type ConfigValues struct {
@@ -31,6 +33,7 @@ type ConfigValues struct {
 	UseListener                     bool
 	UseOutbox                       bool
 	OutboxModels                    []interface{}
+	UsePrometheus                   bool
 }
 
 type ConfigResult struct {
@@ -59,6 +62,10 @@ func ConfigService(configFilePath string, defaultValues ConfigValues) (ConfigRes
 	if err != nil {
 		log.Panicln("Failed to setup outbox: ", err)
 		return ConfigResult{}, err
+	}
+
+	if config.UsePrometheus {
+		prometheus.ServePrometheus()
 	}
 
 	return configResult, nil
