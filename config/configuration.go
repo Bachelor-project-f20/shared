@@ -92,6 +92,7 @@ func setupDefaulValues(defaultValues ConfigValues) ConfigValues {
 	config.UseListener = defaultValues.UseListener
 	config.UseOutbox = defaultValues.UseOutbox
 	config.OutboxModels = defaultValues.OutboxModels
+	config.UsePrometheus = defaultValues.UsePrometheus
 	return config
 }
 
