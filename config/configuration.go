@@ -66,7 +66,7 @@ func ConfigService(configFilePath string, defaultValues ConfigValues) (ConfigRes
 	}
 
 	if config.UsePrometheus {
-		configResult = prometheus.ServePrometheus()
+		configResult.ServePrometheus = prometheus.ServePrometheus()
 	}
 
 	return configResult, nil
