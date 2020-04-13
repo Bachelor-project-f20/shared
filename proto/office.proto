@@ -7,7 +7,6 @@ message Office {
     Address Address = 3;
     string AddressID = 4;
     repeated ContactInfo ContactInfo = 5;
-    repeated string UserIDs = 6;
 }
 
 message Address {
