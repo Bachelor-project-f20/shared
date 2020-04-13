@@ -1,15 +1,13 @@
 syntax = "proto3";
 package proto;
 
-import "proto/user.proto"; 
-
 message Office { 
     string ID = 1;
     string Name = 2;
     Address Address = 3;
     string AddressID = 4;
     repeated ContactInfo ContactInfo = 5;
-    repeated User Users = 6;
+    repeated string UserIDs = 6;
 }
 
 message Address {
