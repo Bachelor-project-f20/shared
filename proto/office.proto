@@ -6,7 +6,6 @@ message Office {
     string Name = 2;
     Address Address = 3;
     string AddressID = 4;
-    repeated ContactInfo ContactInfo = 5;
 }
 
 message Address {
@@ -14,15 +13,6 @@ message Address {
     string RoadName = 2;
     int32 Number = 3;
     int32 ZipCode = 4;
-}
-
-
-message ContactInfo {
-    string ID = 1;
-    string Title = 2;
-    int32 PhoneNumber = 3;
-    string Mail = 4;
-    string CompanyID = 5;
 }
 
 
