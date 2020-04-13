@@ -7,4 +7,5 @@ message Event {
 	string Publisher = 3;
 	int64 Timestamp = 4;
 	bytes Payload = 5;
+	string ApiTag = 6;
 }
